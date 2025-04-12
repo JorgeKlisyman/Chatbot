@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot IA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Digite sua pergunta...">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let userInput = document.getElementById("user-input").value;
+            let chatBox = document.getElementById("chat-box");
+
+            if (userInput.trim() === "") return;
+
+            // Exibe a pergunta do usuário na interface
+            chatBox.innerHTML += `<div class='user-message'>${userInput}</div>`;
+            document.getElementById("user-input").value = "";
+
+            // Envia a pergunta para o Flask (back-end)
+            fetch("http://127.0.0.1:5000/perguntar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ pergunta: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let botResponse = data.resposta;
+                chatBox.innerHTML += `<div class='bot-message'>${botResponse}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                chatBox.innerHTML += `<div class='bot-message'>Erro ao obter resposta.</div>`;
+                console.error("Erro:", error);
+            });
+        }
+    </script>
+</body>
+</html>

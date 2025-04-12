@@ -1,0 +1,48 @@
+import sqlite3
+
+conn = sqlite3.connect('banco.db')
+cursor = conn.cursor()
+
+# Criar a tabela produtos
+cursor.execute('''
+CREATE TABLE produtos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    tipo TEXT NOT NULL,
+    preco REAL NOT NULL,
+    disponivel BOOLEAN NOT NULL
+)
+''')
+
+# Criar a tabela empresa
+cursor.execute('''
+CREATE TABLE empresa (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    chave TEXT NOT NULL,
+    valor TEXT NOT NULL
+)
+''')
+
+# Inserir dados na tabela produtos
+produtos = [
+    ('Película Anti-impacto', 'Automotiva', 49.90, 1),
+    ('Película Residencial', 'Residencial/Corporativa', 59.90, 1),
+    ('Envelopamento Automotivo', 'Estética', 399.90, 0),
+    ('Película PPF', 'Protetora de Pintura', 799.90, 1),
+    ('Papel de Parede Auto Colante', 'Decoração', 89.90, 1),
+]
+
+cursor.executemany("INSERT INTO produtos (nome, tipo, preco, disponivel) VALUES (?, ?, ?, ?)", produtos)
+
+# Inserir dados na tabela empresa
+empresa_info = [
+    ('horario', 'Seg a Sex, 8h às 18h'),
+    ('localizacao', 'Rua Exemplo, 123 - Recife/PE'),
+    ('promocao', '10% off em películas automotivas'),
+]
+
+cursor.executemany("INSERT INTO empresa (chave, valor) VALUES (?, ?)", empresa_info)
+
+conn.commit()
+conn.close()
+exit()
