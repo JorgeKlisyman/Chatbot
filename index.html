@@ -8,9 +8,25 @@
 </head>
 <body>
     <div class="chat-container">
-        <div id="chat-box"></div>
-        <input type="text" id="user-input" placeholder="Digite sua pergunta...">
-        <button onclick="sendMessage()">Enviar</button>
+        <div class="chat-header">FixBot-Assistente IdeaFix</div>
+        
+        <div id="chat-box" class="chat-box">
+            <div class="bot-message">
+                Olá! Bem-vindo(a) à <strong>IdeaFix</strong>!<br>
+                Somos especialistas em películas, adesivos e comunicação visual.<br>
+                Como posso te ajudar hoje?
+                <ul>
+                    <li>🎨 Adesivos personalizados</li>
+                    <li>💬 Quero um orçamento</li>
+                    <li>📋 Ver serviços oferecidos</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Digite sua pergunta...">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
     </div>
 
     <script>
@@ -20,11 +36,11 @@
 
             if (userInput.trim() === "") return;
 
-            // Exibe a pergunta do usuário na interface
+            // Exibe a pergunta do usuário
             chatBox.innerHTML += `<div class='user-message'>${userInput}</div>`;
             document.getElementById("user-input").value = "";
 
-            // Envia a pergunta para o Flask (back-end)
+            // Envia para o back-end
             fetch("http://127.0.0.1:5000/perguntar", {
                 method: "POST",
                 headers: {
